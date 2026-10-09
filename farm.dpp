@@ -1,0 +1,6 @@
+// small.dpp
+RESOURCE hardware mist_fan IDENTIFIED BY 0x02
+
+WHEN temperature IS GREATER THAN 35 FOR 3 seconds
+TRIGGER mist_fan ON
+UNTIL temperature IS LESS THAN OR EQUAL TO 35

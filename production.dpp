@@ -1,0 +1,16 @@
+// production.dpp
+RESOURCE hardware moisture_sensor IDENTIFIED BY 0x01
+RESOURCE hardware water_pump      IDENTIFIED BY 0x02
+
+SET evaluation_interval = 1 second
+
+// Core Logic Pipeline
+WHEN moisture_sensor.val IS LESS THAN 30 FOR 3 seconds
+TRIGGER water_pump ON
+UNTIL moisture_sensor.val IS GREATER THAN 50
+
+// The High-Availability Safety Layer
+VALIDATE moisture_sensor.val BETWEEN 0 AND 100
+RETRY LIMIT = 3 SECONDS BEFORE PERSISTENT FAILURE
+TIMEOUT moisture_sensor.val AFTER 4 seconds
+STABILIZE FOR 2 seconds
